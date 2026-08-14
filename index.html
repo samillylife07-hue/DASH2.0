@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Dashboard de Atendimentos 2026</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="stylesheet" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0MwLoBBsrU3ThLLAqBncXia8M6SYVnDcAGLQ6gT8T8uVPMcp4zWx_JhQlohx1dTWTXetuYGgM4OvK/pub?gid=1680437388&single=true&output=csv">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root{
@@ -53,8 +53,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Roboto,sans
 .topbar-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
 
 /* LOADING OVERLAY */
-.loading-overlay{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity 0.3s}
-.loading-overlay.hidden{opacity:0;pointer-events:none}
+.loading-overlay{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity 0.4s,visibility 0.4s}
+.loading-overlay.hidden{opacity:0;pointer-events:none;visibility:hidden}
 .loader-ring{width:48px;height:48px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
 .loader-bar{width:200px;height:3px;background:var(--border2);border-radius:99px;overflow:hidden}
 .loader-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;animation:loadbar 1.5s ease-in-out infinite}
@@ -206,17 +206,14 @@ tbody tr:hover td{background:var(--surface2)}
 </head>
 <body>
 
-<!-- LOADING OVERLAY -->
 <div class="loading-overlay" id="loading-overlay">
   <div class="loader-ring"></div>
   <div class="loader-bar"><div class="loader-bar-fill"></div></div>
   <div class="loader-text" id="loader-text">Carregando dados da planilha...</div>
 </div>
 
-<!-- MINI LOADER -->
 <div class="mini-loader" id="mini-loader"><div class="mini-loader-fill"></div></div>
 
-<!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-brand">
     <div class="logo"><i class="ti ti-chart-dots-3" aria-hidden="true"></i></div>
@@ -235,18 +232,16 @@ tbody tr:hover td{background:var(--surface2)}
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard" style="display:none">
 <div class="container">
 
-<!-- FILTROS -->
 <div class="filters-wrap">
-  <!-- PERÍODO -->
   <div class="filters-row">
     <span class="filter-label"><i class="ti ti-calendar" style="vertical-align:-2px" aria-hidden="true"></i> Período</span>
     <div class="chip-group">
       <button class="chip active" data-p="todos" onclick="setPeriod(this)">Todos</button>
       <button class="chip" data-p="hoje" onclick="setPeriod(this)">Hoje</button>
+      <button class="chip" data-p="ontem" onclick="setPeriod(this)">Ontem</button>
       <button class="chip" data-p="semana" onclick="setPeriod(this)">Semana</button>
       <button class="chip" data-p="mes" onclick="setPeriod(this)">Mês</button>
       <button class="chip" data-p="bimestre" onclick="setPeriod(this)">Bimestre</button>
@@ -260,7 +255,6 @@ tbody tr:hover td{background:var(--surface2)}
       <input class="finput" type="date" id="date-to" onchange="applyFilters()" style="width:140px">
     </div>
   </div>
-  <!-- OUTROS FILTROS -->
   <div class="filters-row">
     <span class="filter-label"><i class="ti ti-filter" style="vertical-align:-2px" aria-hidden="true"></i> Filtros</span>
     <select class="fselect" id="f-colab" onchange="applyFilters()"><option value="">Todos os colaboradores</option></select>
@@ -273,17 +267,14 @@ tbody tr:hover td{background:var(--surface2)}
   </div>
 </div>
 
-<!-- MÉTRICAS PRINCIPAIS -->
 <div class="section-label"><i class="ti ti-dashboard" aria-hidden="true"></i> Indicadores principais</div>
 <div class="metrics" id="metrics-main"></div>
 
-<!-- MÉTRICAS DE STATUS -->
 <div class="section-label"><i class="ti ti-activity" aria-hidden="true"></i> Status operacional</div>
 <div class="metrics" id="metrics-status"></div>
 
 <div class="section-divider"></div>
 
-<!-- GRÁFICOS LINHA 1: COLABORADORES + TRANSPORTADORAS -->
 <div class="section-label"><i class="ti ti-users" aria-hidden="true"></i> Colaboradores</div>
 <div class="charts-grid-2" style="margin-bottom:12px">
   <div class="chart-card">
@@ -301,7 +292,6 @@ tbody tr:hover td{background:var(--surface2)}
   </div>
 </div>
 
-<!-- TRANSPORTADORAS -->
 <div class="section-label"><i class="ti ti-truck" aria-hidden="true"></i> Transportadoras</div>
 <div class="charts-grid-2" style="margin-bottom:12px">
   <div class="chart-card">
@@ -322,7 +312,6 @@ tbody tr:hover td{background:var(--surface2)}
   </div>
 </div>
 
-<!-- EVOLUÇÃO + CANAL -->
 <div class="section-label"><i class="ti ti-trending-up" aria-hidden="true"></i> Evolução e canais</div>
 <div class="charts-grid-2" style="margin-bottom:12px">
   <div class="chart-card" style="grid-column:1/-1">
@@ -356,7 +345,6 @@ tbody tr:hover td{background:var(--surface2)}
 
 <div class="section-divider"></div>
 
-<!-- TABELA -->
 <div class="section-label"><i class="ti ti-table" aria-hidden="true"></i> Registros detalhados</div>
 <div class="table-card">
   <div class="table-toolbar">
@@ -376,12 +364,9 @@ tbody tr:hover td{background:var(--surface2)}
   </div>
 </div>
 
-</div><!-- /container -->
-</div><!-- /dashboard -->
-
-<script>
+</div></div><script>
 // ─── CONFIG ────────────────────────────────────────────────────
-const CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vR7_3MlDpNRPzAPn-3yq_zBk3KPRnSwqXE5bhUTPs2fDkq7p3a6XTeSuctLLl-QCPLxk52omg8nItXq/pub?gid=1680437388&single=true&output=csv";
+const CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0MwLoBBsrU3ThLLAqBncXia8M6SYVnDcAGLQ6gT8T8uVPMcp4zWx_JhQlohx1dTWTXetuYGgM4OvK/pub?gid=1680437388&single=true&output=csv";
 
 // ─── STATE ─────────────────────────────────────────────────────
 let raw=[],filtered=[],charts={},hiddenTransp=new Set(),currentPeriod='todos',evolMode='dia';
@@ -409,10 +394,10 @@ function hideLoading(){document.getElementById('loading-overlay').classList.add(
 function showMini(){document.getElementById('mini-loader').classList.add('active');}
 function hideMini(){document.getElementById('mini-loader').classList.remove('active');}
 
-// ─── CSV PARSE ─────────────────────────────────────────────────
+// ─── CSV PARSE CORRIGIDO ───────────────────────────────────────
 function parseCSVLine(l){
   const r=[];let c='',q=false;
-  for(let i=0;i<l.length;i++){
+  for(let i=0; i<l.length; i++){
     const ch=l[i];
     if(ch==='"'){if(q&&l[i+1]==='"'){c+='"';i++;}else q=!q;}
     else if(ch===','&&!q){r.push(c.trim());c='';}
@@ -429,18 +414,25 @@ function parseCSV(txt){
       idk:c[8]||'',transportadora:c[9]||'',statusMacro:c[10]||'',
       filial:c[11]||'',cd:c[12]||'',observacao:c[13]||'',detalhe:c[14]||'',
       enviadoComo:c[15]||'',mes:c[16]||''};
-  }).filter(r=>r.colaborador&&r.colaborador!=='COLABORADOR'&&r.pedido.trim()!=='');
+  }).filter(r=>r.colaborador && r.colaborador!=='COLABORADOR' && r.pedido && r.pedido.trim()!=='');
 }
 
-// ─── LOAD ──────────────────────────────────────────────────────
+// ─── LOAD CORRIGIDO ────────────────────────────────────────────
 async function loadData(refresh=false){
   if(!refresh)showLoading('Carregando dados da planilha...');
-  else{showMini();document.getElementById('btn-refresh').querySelector('i').style.animation='spin 0.8s linear infinite';}
+  else{showMini();const ri=document.querySelector('#btn-refresh i');if(ri)ri.style.animation='spin 0.8s linear infinite';}
   try{
-    const res=await fetch(CSV_URL+'&_='+Date.now());
+    const res=await fetch(CSV_URL,{
+      method:'GET',
+      cache:'no-cache',
+      mode:'cors'
+    });
     if(!res.ok)throw new Error('Erro HTTP '+res.status);
     const txt=await res.text();
+    if(!txt||txt.trim().length<10)throw new Error('Dados vazios');
     raw=parseCSV(txt);
+    if(raw.length===0)throw new Error('Nenhum dado encontrado ou planilha fora do padrão esperado.');
+    
     document.getElementById('dashboard').style.display='block';
     document.getElementById('topbar-sub').textContent='Atualizado às '+new Date().toLocaleTimeString('pt-BR');
     document.getElementById('topbar-count').style.display='';
@@ -448,11 +440,21 @@ async function loadData(refresh=false){
     populateFilters();
     buildTranspChips();
     applyFilters();
+    hideLoading();
   }catch(e){
-    document.getElementById('loader-text').textContent='Erro ao carregar. Verifique a planilha.';
-    document.getElementById('loading-overlay').innerHTML+=`<button class="btn btn-accent" onclick="loadData()" style="margin-top:8px"><i class="ti ti-refresh"></i> Tentar novamente</button>`;
+    const ol=document.getElementById('loading-overlay');
+    ol.classList.remove('hidden');
+    ol.innerHTML=`
+      <div style="text-align:center;padding:2rem;max-width:350px;margin:auto">
+        <i class="ti ti-wifi-off" style="font-size:40px;color:var(--text3);display:block;margin-bottom:1rem"></i>
+        <div style="font-size:15px;font-weight:600;margin-bottom:8px">Não foi possível carregar</div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:1.5rem;line-height:1.6">${e.message}<br><br>Verifique sua conexão e garanta que a aba correta da planilha esteja publicada como CSV publicamente.</div>
+        <button class="btn btn-accent" onclick="window.location.reload()" style="width:100%;justify-content:center">
+          <i class="ti ti-refresh"></i> Recarregar Página
+        </button>
+      </div>`;
   }finally{
-    hideLoading();hideMini();
+    hideMini();
     const ri=document.querySelector('#btn-refresh i');if(ri)ri.style.animation='';
   }
 }
@@ -498,6 +500,7 @@ function parseDate(s){
 function startOf(unit){
   const t=new Date();t.setHours(0,0,0,0);
   if(unit==='hoje')return t;
+  if(unit==='ontem'){t.setDate(t.getDate()-1);return t;}
   if(unit==='semana'){t.setDate(t.getDate()-t.getDay());return t;}
   if(unit==='mes'){t.setDate(1);return t;}
   if(unit==='bimestre'){const m=t.getMonth();t.setMonth(m-m%2);t.setDate(1);return t;}
@@ -553,8 +556,15 @@ function applyFilters(){
       if(canal&&r.canal!==canal)return false;
       if(status&&r.enviadoComo!==status)return false;
       if(mes&&r.mes!==mes)return false;
-      if(r.pedido.trim()==='')return false;
-      if(inicio&&r.data){const d=parseDate(r.data);if(d&&d<inicio)return false;}
+      if(!r.pedido || r.pedido.trim()==='')return false;
+      if(inicio&&r.data){
+        const d=parseDate(r.data);
+        if(d&&d<inicio)return false;
+        if(currentPeriod==='ontem'&&d){
+          const fimOntem=new Date(inicio);fimOntem.setDate(fimOntem.getDate()+1);
+          if(d>=fimOntem)return false;
+        }
+      }
       if(currentPeriod==='custom'&&r.data){
         const d=parseDate(r.data);
         if(d){
@@ -584,7 +594,6 @@ function renderMetrics(){
   const colabs=new Set(filtered.map(r=>r.colaborador).filter(Boolean)).size;
   const transp=new Set(filtered.map(r=>r.transportadora).filter(Boolean)).size;
 
-  // Média diária
   const dates=[...new Set(filtered.map(r=>r.data).filter(Boolean))];
   const mediaDia=dates.length?Math.round(t/dates.length*10)/10:0;
 
@@ -592,7 +601,7 @@ function renderMetrics(){
   const taxaConclusao=pct(conc);
 
   document.getElementById('metrics-main').innerHTML=`
-    ${mc('ti-clipboard-list',t,'Total de atendimentos','Coluna E preenchida','#6366f1','#eef2ff')}
+    ${mc('ti-clipboard-list',t,'Total de atendimentos','Registros ativos','#6366f1','#eef2ff')}
     ${mc('ti-circle-check',conc,'Concluídos',taxaConclusao+'% de conclusão','var(--green)','var(--green-bg)')}
     ${mc('ti-chart-line',mediaDia,'Média por dia','atendimentos/dia','#06b6d4','#cffafe')}
     ${mc('ti-users',colabs,'Colaboradores','ativos no período','#8b5cf6','#ede9fe')}
@@ -645,6 +654,7 @@ function gc(){
   return{text:s.getPropertyValue('--text2').trim()||'#666',grid:'rgba(128,128,128,0.1)',surface:s.getPropertyValue('--surface').trim()||'#fff'};
 }
 function renderCharts(){
+  if(!filtered.length) return;
   const{text,grid}=gc();
   const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed.y??ctx.parsed}  (${filtered.length?Math.round((ctx.parsed.y??ctx.parsed)/filtered.length*100):0}%)`}}}};
 
@@ -703,6 +713,7 @@ function renderCharts(){
 }
 
 function renderEvolChart(){
+  if(!filtered.length) return;
   const{text,grid}=gc();
   dc('timeline');
   const byDate={};
@@ -783,5 +794,57 @@ function renderTable(){
 
 loadData();
 </script>
+<!-- Assinatura Profissional Samilly -->
+<style>
+  .assinatura-pro {
+    position: fixed;
+    bottom: 16px;
+    right: 20px;
+    font-size: 11px;
+    font-family: inherit;
+    color: var(--text3); /* Usa a cor cinza nativa do seu site */
+    letter-spacing: 0.05em; /* Espaçamento elegante entre as letras */
+    z-index: 9999;
+    transition: all 0.3s ease;
+    text-transform: uppercase; /* Letras maiúsculas para um tom mais premium */
+    opacity: 0.8;
+    pointer-events: auto;
+  }
+
+  .assinatura-pro strong {
+    color: var(--text2);
+    font-weight: 600;
+  }
+
+  /* Efeito de brilho ao passar o mouse */
+  .assinatura-pro:hover {
+    opacity: 1;
+    color: var(--accent); /* Fica com a cor principal (azul/roxo) do seu site no hover */
+  }
+  .assinatura-pro:hover strong {
+    color: var(--accent);
+  }
+
+  /* Responsividade: Centralizado e discreto no celular */
+  @media (max-width: 768px) {
+    .assinatura-pro {
+      bottom: 12px;
+      right: 50%;
+      transform: translateX(50%);
+      font-size: 10px;
+      background: var(--surface); /* Fundo sutil só no celular para não conflitar com a rolagem */
+      padding: 4px 12px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+  }
+</style>
+
+<div class="assinatura-pro">
+  By: <strong>Samilly C. Ferreira</strong>
+</div>
+<!-- Fim da Assinatura -->
+
 </body>
 </html>
+
